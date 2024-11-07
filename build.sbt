@@ -2,7 +2,7 @@ name := "sbt-jackson-version-check"
 organization := "nl.gn0s1s"
 startYear := Some(2024)
 homepage := Some(url("https://github.com/philippus/sbt-jackson-version-check"))
-licenses += ("MPL-2.0", url("https://www.mozilla.org/MPL/2.0/"))
+licenses += License.Apache2
 
 developers := List(
   Developer(

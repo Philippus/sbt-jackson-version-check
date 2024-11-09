@@ -1,7 +1,7 @@
-name := "sbt-jackson-version-check"
+name         := "sbt-jackson-version-check"
 organization := "nl.gn0s1s"
-startYear := Some(2024)
-homepage := Some(url("https://github.com/philippus/sbt-jackson-version-check"))
+startYear    := Some(2024)
+homepage     := Some(url("https://github.com/philippus/sbt-jackson-version-check"))
 licenses += License.Apache2
 
 developers := List(
@@ -15,7 +15,7 @@ developers := List(
 
 enablePlugins(SbtPlugin)
 
-scalaVersion := "2.12.20"
+scalaVersion := "2.13.15"
 crossScalaVersions += "3.3.4"
 
 pluginCrossBuild / sbtVersion := {
@@ -25,7 +25,7 @@ pluginCrossBuild / sbtVersion := {
   }
 }
 
-ThisBuild / versionScheme := Some("semver-spec")
+ThisBuild / versionScheme          := Some("semver-spec")
 ThisBuild / versionPolicyIntention := Compatibility.BinaryCompatible
 
 Compile / packageBin / packageOptions += Package.ManifestAttributes(

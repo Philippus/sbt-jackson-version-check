@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
 )
 
 jacksonVersionCheckFailBuildOnNonMatchingVersions := false
-jacksonVersionCheckStrict := true
+jacksonVersionCheckStrict                         := true
 
 TaskKey[Unit]("check") := {
   val lastLog: File = BuiltinCommands.lastLogFile(state.value).get

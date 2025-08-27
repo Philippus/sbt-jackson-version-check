@@ -22,14 +22,20 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     jacksonVersionCheckStrict                         := false
   )
 
-  override lazy val projectSettings: Seq[Def.Setting[Task[Unit]]] = Seq(
-    jacksonVersionCheck := checkModuleVersions(
-      updateFull.value,
-      streams.value.log,
-      jacksonVersionCheckFailBuildOnNonMatchingVersions.value,
-      jacksonVersionCheckStrict.value
+  override lazy val projectSettings: Seq[Def.Setting[Task[Unit]]] = {
+    import nl.gn0s1s.jackson.versioncheck.Compat._
+
+    Seq(
+      jacksonVersionCheck := Def.uncached {
+        checkModuleVersions(
+          updateFull.value,
+          streams.value.log,
+          jacksonVersionCheckFailBuildOnNonMatchingVersions.value,
+          jacksonVersionCheckStrict.value
+        )
+      }
     )
-  )
+  }
 
   private val jacksonModules = Set(
     "jackson-annotations",

@@ -38,7 +38,6 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
   }
 
   private val jacksonModules = Set(
-    "jackson-annotations",
     "jackson-core",
     "jackson-databind",
     "jackson-dataformat-avro",

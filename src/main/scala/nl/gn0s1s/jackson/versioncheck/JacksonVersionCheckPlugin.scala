@@ -117,10 +117,10 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     val allModules = updateReport.allModules
     val grouped    = allModules
       .filter(m =>
-        m.organization == "com.fasterxml.jackson.core" ||
-          m.organization == "com.fasterxml.jackson.dataformat" ||
-          m.organization == "com.fasterxml.jackson.datatype" ||
-          m.organization == "com.fasterxml.jackson.module"
+        m.organization == "com.fasterxml.jackson.core" || m.organization == "tools.jackson.core" ||
+          m.organization == "com.fasterxml.jackson.dataformat" || m.organization == "tools.jackson.dataformat" ||
+          m.organization == "com.fasterxml.jackson.datatype" || m.organization == "tools.jackson.datatype" ||
+          m.organization == "com.fasterxml.jackson.module" || m.organization == "tools.jackson.module"
       )
       .groupBy { m =>
         if (jacksonModules(moduleNameWithoutScalaVersion(m))) JacksonModule

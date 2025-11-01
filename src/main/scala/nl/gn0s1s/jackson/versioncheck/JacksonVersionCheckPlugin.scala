@@ -114,20 +114,35 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
       strict: Boolean
   ): Unit = {
     log.info("Checking Jackson module versions")
-    val allModules = updateReport.allModules
-    val grouped    = allModules
+    val allModules      = updateReport.allModules
+    val groupedJackson2 = allModules
       .filter(m =>
-        m.organization == "com.fasterxml.jackson.core" || m.organization == "tools.jackson.core" ||
-          m.organization == "com.fasterxml.jackson.dataformat" || m.organization == "tools.jackson.dataformat" ||
-          m.organization == "com.fasterxml.jackson.datatype" || m.organization == "tools.jackson.datatype" ||
-          m.organization == "com.fasterxml.jackson.module" || m.organization == "tools.jackson.module"
+        m.organization == "com.fasterxml.jackson.core" || m.organization == "com.fasterxml.jackson.dataformat" ||
+          m.organization == "com.fasterxml.jackson.datatype" || m.organization == "com.fasterxml.jackson.module"
       )
       .groupBy { m =>
         if (jacksonModules(moduleNameWithoutScalaVersion(m))) JacksonModule
         else Others
       }
-    val jacksonOk  =
-      grouped.get(JacksonModule).forall(verifyVersions(
+    val jackson2Ok      =
+      groupedJackson2.get(JacksonModule).forall(verifyVersions(
+        _,
+        log,
+        failBuildOnNonMatchingVersions,
+        strict
+      ))
+
+    val groupedJackson3 = allModules
+      .filter(m =>
+        m.organization == "tools.jackson.core" || m.organization == "tools.jackson.dataformat" ||
+          m.organization == "tools.jackson.datatype" || m.organization == "tools.jackson.module"
+      )
+      .groupBy { m =>
+        if (jacksonModules(moduleNameWithoutScalaVersion(m))) JacksonModule
+        else Others
+      }
+    val jackson3Ok =
+      groupedJackson3.get(JacksonModule).forall(verifyVersions(
         _,
         log,
         failBuildOnNonMatchingVersions,
@@ -136,13 +151,29 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
 
     for {
       jacksonDatabindVersion    <-
-        allModules.filter(_.name == "jackson-databind").map(m => Version(m.revision)).sorted.lastOption
+        allModules.filter(m => m.name == "jackson-databind" && m.organization == "com.fasterxml.jackson.core").map(m =>
+          Version(m.revision)
+        ).sorted.lastOption
       jacksonModuleScalaVersion <-
-        allModules.filter(m => moduleNameWithoutScalaVersion(m) == "jackson-module-scala").map(m => Version(m.revision))
+        allModules.filter(m =>
+          moduleNameWithoutScalaVersion(m) == "jackson-module-scala" && m.organization == "com.fasterxml.jackson.module"
+        ).map(m => Version(m.revision))
           .sorted.lastOption
     } yield verifyJacksonModuleScalaRequirement(jacksonDatabindVersion, jacksonModuleScalaVersion, log)
 
-    if (failBuildOnNonMatchingVersions && !jacksonOk)
+    for {
+      jacksonDatabindVersion    <-
+        allModules.filter(m => m.name == "jackson-databind" && m.organization == "tools.jackson.core").map(m =>
+          Version(m.revision)
+        ).sorted.lastOption
+      jacksonModuleScalaVersion <-
+        allModules.filter(m =>
+          moduleNameWithoutScalaVersion(m) == "jackson-module-scala" && m.organization == "tools.jackson.module"
+        ).map(m => Version(m.revision))
+          .sorted.lastOption
+    } yield verifyJacksonModuleScalaRequirement(jacksonDatabindVersion, jacksonModuleScalaVersion, log)
+
+    if (failBuildOnNonMatchingVersions && !(jackson2Ok && jackson3Ok))
       throw NonMatchingVersionsException
   }
 

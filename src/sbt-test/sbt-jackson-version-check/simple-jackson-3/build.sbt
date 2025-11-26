@@ -2,9 +2,9 @@ scalaVersion := "2.13.16"
 
 // direct dependency mismatch
 libraryDependencies ++= Seq(
-  "com.fasterxml.jackson.core"       % "jackson-annotations"    % "2.20",
-  "tools.jackson.core"               % "jackson-core"           % "3.0.1",
-  "tools.jackson.core"               % "jackson-databind"       % "3.0.0"
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.20",
+  "tools.jackson.core"         % "jackson-core"        % "3.0.1",
+  "tools.jackson.core"         % "jackson-databind"    % "3.0.0"
 )
 
 jacksonVersionCheckFailBuildOnNonMatchingVersions := true

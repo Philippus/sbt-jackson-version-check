@@ -141,7 +141,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
         if (jacksonModules(moduleNameWithoutScalaVersion(m))) JacksonModule
         else Others
       }
-    val jackson3Ok =
+    val jackson3Ok      =
       groupedJackson3.get(JacksonModule).forall(verifyVersions(
         _,
         log,

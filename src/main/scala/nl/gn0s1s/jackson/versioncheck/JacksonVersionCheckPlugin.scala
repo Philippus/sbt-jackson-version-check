@@ -193,9 +193,10 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     val modulesTobeUpdated    =
       modules.collect {
         case m
-            if (strict && m.revision != modulesLatestRevision) || (!strict && extractMajorMinor(
-              m.revision
-            ) != extractMajorMinor(modulesLatestRevision)) => moduleNameWithoutScalaVersion(m)
+            if (strict && m.revision != modulesLatestRevision) ||
+              (!strict && extractMajorMinor(
+                m.revision
+              ) != extractMajorMinor(modulesLatestRevision)) => moduleNameWithoutScalaVersion(m)
       }.sorted
     if (modulesTobeUpdated.nonEmpty) {
       val groupedByVersion = modules

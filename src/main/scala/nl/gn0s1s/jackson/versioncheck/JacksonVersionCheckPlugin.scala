@@ -23,8 +23,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
   )
 
   override lazy val projectSettings: Seq[Def.Setting[Task[Unit]]] = {
-    import nl.gn0s1s.jackson.versioncheck.Compat._
-
+    import sbtcompat.PluginCompat.*
     Seq(
       jacksonVersionCheck := Def.uncached {
         checkModuleVersions(

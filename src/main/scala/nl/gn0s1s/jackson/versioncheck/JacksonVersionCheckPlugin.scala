@@ -11,7 +11,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
       settingKey[Boolean]("Sets whether non-matching Jackson module versions fail the build")
     lazy val jacksonVersionCheckStrict                         =
       settingKey[Boolean]("Sets whether Jackson modules versions should match exactly, including the patch version.")
-    val jacksonVersionCheck                                    =
+    @transient val jacksonVersionCheck                         =
       taskKey[Unit]("Check that all Jackson modules have the same version")
   }
 
@@ -23,16 +23,13 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
   )
 
   override lazy val projectSettings: Seq[Def.Setting[Task[Unit]]] = {
-    import sbtcompat.PluginCompat.*
     Seq(
-      jacksonVersionCheck := Def.uncached {
-        checkModuleVersions(
-          updateFull.value,
-          streams.value.log,
-          jacksonVersionCheckFailBuildOnNonMatchingVersions.value,
-          jacksonVersionCheckStrict.value
-        )
-      }
+      jacksonVersionCheck := checkModuleVersions(
+        updateFull.value,
+        streams.value.log,
+        jacksonVersionCheckFailBuildOnNonMatchingVersions.value,
+        jacksonVersionCheckStrict.value
+      )
     )
   }
 

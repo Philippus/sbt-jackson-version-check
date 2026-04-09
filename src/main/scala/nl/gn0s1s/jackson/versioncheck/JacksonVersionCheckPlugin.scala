@@ -193,7 +193,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
               (!strict && extractMajorMinor(
                 m.revision
               ) != extractMajorMinor(modulesLatestRevision)) => moduleNameWithoutScalaVersion(m)
-      }.sorted
+      }.distinct.sorted
     if (modulesTobeUpdated.nonEmpty) {
       val groupedByVersion = modules
         .groupBy(_.revision)

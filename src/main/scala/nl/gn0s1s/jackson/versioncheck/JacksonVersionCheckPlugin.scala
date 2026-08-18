@@ -170,7 +170,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     } yield verifyJacksonModuleScalaRequirement(jacksonDatabindVersion, jacksonModuleScalaVersion, log)
 
     if (failBuildOnNonMatchingVersions && !(jackson2Ok && jackson3Ok))
-      throw NonMatchingVersionsException
+      throw NonMatchingVersionsException()
   }
 
   private def extractMajorMinor(version: String): (Int, Int) =

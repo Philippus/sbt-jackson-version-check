@@ -33,10 +33,10 @@ addSbtPlugin("nl.gn0s1s" % "sbt-jackson-version-check" % "0.0.9")
 ### Configuration
 You can configure the configuration in your `build.sbt` file.
 
-| Setting                                           | Description                                                                                                                                           | Default Value |
-|:--------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------|
-| jacksonVersionCheckFailBuildOnNonMatchingVersions | Sets whether non-matching versions fail the build, if `false` non-matching versions show up as warnings in the log, if `true` they show up as errors. | false         |
-| jacksonVersionCheckStrict                         | Sets whether Jackson modules versions should match exactly, including the patch version. Otherwise only the major and minor versions should match.    | false         |   
+| Setting                                           | Description                                                                                                                                                                         | Default Value |
+|:--------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------|
+| jacksonVersionCheckFailBuildOnNonMatchingVersions | Sets whether non-matching versions fail the build, if `false` non-matching versions show up as warnings in the log, if `true` they show up as errors.                               | false         |
+| jacksonVersionCheckStrict                         | Sets whether Jackson modules versions should match exactly, including the patch version but excluding a numeric revision. Otherwise only the major and minor versions should match. | false         |
 
 ## License
 The code is available under the [Apache 2.0 License](LICENSE).

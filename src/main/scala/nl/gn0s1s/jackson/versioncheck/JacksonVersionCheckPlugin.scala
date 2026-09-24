@@ -10,7 +10,9 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     lazy val jacksonVersionCheckFailBuildOnNonMatchingVersions =
       settingKey[Boolean]("Sets whether non-matching Jackson module versions fail the build")
     lazy val jacksonVersionCheckStrict                         =
-      settingKey[Boolean]("Sets whether Jackson modules versions should match exactly, including the patch version.")
+      settingKey[Boolean](
+        "Sets whether Jackson modules versions should match exactly, including the patch version but excluding the revision."
+      )
     @transient val jacksonVersionCheck                         =
       taskKey[Unit]("Check that all Jackson modules have the same version")
   }
@@ -179,6 +181,12 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
       case _                       => (0, 0)
     }
 
+  private def extractMajorMinorPatch(version: String): (Int, Int, Int) =
+    version.split('.') match {
+      case Array(major, minor, patch, _*) => (major.toInt, minor.toInt, patch.toInt)
+      case _                              => (0, 0, 0)
+    }
+
   private def verifyVersions(
       modules: Seq[ModuleID],
       log: Logger,
@@ -189,10 +197,9 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
     val modulesTobeUpdated    =
       modules.collect {
         case m
-            if (strict && m.revision != modulesLatestRevision) ||
-              (!strict && extractMajorMinor(
-                m.revision
-              ) != extractMajorMinor(modulesLatestRevision)) => moduleNameWithoutScalaVersion(m)
+            if (strict && extractMajorMinorPatch(m.revision) != extractMajorMinorPatch(modulesLatestRevision)) ||
+              (!strict && extractMajorMinor(m.revision) != extractMajorMinor(modulesLatestRevision)) =>
+          moduleNameWithoutScalaVersion(m)
       }.distinct.sorted
     if (modulesTobeUpdated.nonEmpty) {
       val groupedByVersion = modules

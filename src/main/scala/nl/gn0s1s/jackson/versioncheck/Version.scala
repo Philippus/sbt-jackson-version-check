@@ -31,7 +31,7 @@ private object Version {
  * Comparable version information.
  *
  * The typical convention is to use 3 digit version numbers `major.minor.patch`,
- * but 1 or two digits are also supported.
+ * but versions with one to four numeric components are supported.
  *
  * If no `.` is used it is interpreted as a single digit version number or as
  * plain alphanumeric if it couldn't be parsed as a number.
@@ -143,8 +143,16 @@ private final class Version(val version: String) extends Comparable[Version] {
           nbrs(2) = n1
           nbrs(3) = n2
           rest
+        } else if (segments.length == 4) {
+          // for example 2.22.3.1 or 2.22.3.1-SNAPSHOT
+          val (n1, rest) = parseLastPart(segments(3))
+          nbrs(0) = segments(0).toInt
+          nbrs(1) = segments(1).toInt
+          nbrs(2) = segments(2).toInt
+          nbrs(3) = n1
+          rest
         } else {
-          throw new IllegalArgumentException(s"Only 3 digits separated with '.' are supported. [$version]")
+          throw new IllegalArgumentException(s"At most 4 digits separated with '.' are supported. [$version]")
         }
 
       this.rest = rst

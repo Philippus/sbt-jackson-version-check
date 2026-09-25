@@ -15,5 +15,5 @@ TaskKey[Unit]("check") := {
   val lastLog: File = BuiltinCommands.lastLogFile(state.value).get
   val last: String  = IO.read(lastLog)
   if (!last.contains("You are using version 2.18.1 of Jackson, but "))
-    sys.error("expected no mention of non-matching Jackson module versions")
+    sys.error("expected mention of non-matching Jackson module versions")
 }

@@ -10,7 +10,10 @@ libraryDependencies ++= Seq(
 jacksonVersionCheckFailBuildOnNonMatchingVersions := true
 jacksonVersionCheckStrict                         := true
 
-TaskKey[Unit]("check") := {
+@transient
+lazy val check = taskKey[Unit]("Check the previous task's log")
+
+check := {
   val lastLog: File = BuiltinCommands.lastLogFile(state.value).get
   val last: String  = IO.read(lastLog)
   if (!last.contains("You are using version 3.0.1 of Jackson, but "))

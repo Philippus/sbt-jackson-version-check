@@ -1,7 +1,7 @@
 name         := "sbt-jackson-version-check"
 organization := "nl.gn0s1s"
 startYear    := Some(2024)
-homepage     := Some(url("https://github.com/philippus/sbt-jackson-version-check"))
+homepage     := Some(uri("https://github.com/philippus/sbt-jackson-version-check"))
 licenses += License.Apache2
 
 developers := List(
@@ -9,7 +9,7 @@ developers := List(
     id = "philippus",
     name = "Philippus Baalman",
     email = "",
-    url = url("https://github.com/philippus")
+    url = uri("https://github.com/philippus")
   )
 )
 

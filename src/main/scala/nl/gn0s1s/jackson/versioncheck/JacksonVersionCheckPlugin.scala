@@ -27,7 +27,7 @@ object JacksonVersionCheckPlugin extends AutoPlugin {
   override lazy val projectSettings: Seq[Def.Setting[Task[Unit]]] = {
     Seq(
       jacksonVersionCheck := checkModuleVersions(
-        updateFull.value,
+        update.value,
         streams.value.log,
         jacksonVersionCheckFailBuildOnNonMatchingVersions.value,
         jacksonVersionCheckStrict.value

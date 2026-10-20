@@ -10,7 +10,10 @@ libraryDependencies ++= Seq(
 jacksonVersionCheckFailBuildOnNonMatchingVersions := true
 jacksonVersionCheckStrict                         := true
 
-TaskKey[Unit]("check") := {
+@transient
+lazy val check = taskKey[Unit]("Check the previous task's log")
+
+check := {
   val lastLog: File = BuiltinCommands.lastLogFile(state.value).get
   val last: String  = IO.read(lastLog)
   if (last.contains("Jackson Scala module 2.18.0 requires Jackson Databind version >= 2.18.0 and < 2.19.0"))

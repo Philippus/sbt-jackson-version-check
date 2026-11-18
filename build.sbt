@@ -15,12 +15,12 @@ developers := List(
 
 enablePlugins(SbtPlugin)
 
-scalaVersion := "2.12.21"
-crossScalaVersions += "3.8.4"
+scalaVersion       := "2.12.21"
+crossScalaVersions := Seq("2.12.21", "3.9.0")
 
 scalacOptions ++= {
   scalaBinaryVersion.value match {
-    case "2.12" => Seq("-release:8")
+    case "2.12" => Seq("-Xsource:3", "-release:8")
     case _      => Nil
   }
 }
@@ -28,7 +28,7 @@ scalacOptions ++= {
 pluginCrossBuild / sbtVersion := {
   scalaBinaryVersion.value match {
     case "2.12" => "1.10.5"
-    case _      => "2.0.0"
+    case _      => "2.1.0"
   }
 }
 
@@ -38,6 +38,8 @@ ThisBuild / versionPolicyIntention := Compatibility.BinaryCompatible
 Compile / packageBin / packageOptions += Package.ManifestAttributes(
   "Automatic-Module-Name" -> "nl.gn0s1s.jackson.versioncheck"
 )
+
+scriptedSbt := (if (scalaBinaryVersion.value == "2.12") "1.13.1" else "2.1.0")
 
 scriptedLaunchOpts := {
   scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-Dplugin.version=" + version.value)

@@ -15,8 +15,11 @@ jacksonVersionCheckStrict                         := true
 lazy val check = taskKey[Unit]("Check the previous task's log")
 
 check := {
-  val lastLog: File = BuiltinCommands.lastLogFile(state.value).get
-  val last: String  = IO.read(lastLog)
+  val taskStreams = (jacksonVersionCheck / streams).value
+  val reader = taskStreams.readText(taskStreams.key)
+  val last: String =
+    try Iterator.continually(reader.readLine()).takeWhile(_ != null).mkString("\n")
+    finally reader.close()
   if (!last.contains("You are using version 2.18.0 of Jackson, but "))
     sys.error("expected mention of non-matching Jackson module versions")
 }
